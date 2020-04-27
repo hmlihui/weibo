@@ -73,4 +73,65 @@ class User extends Authenticatable
                     ->orderBy('created_at', 'desc');
     } 
 
+    /**
+     * [followers 获取用户粉丝]
+     * @Author   larry1.li
+     * @DateTime 2020-04-27T15:50:05+0800
+     * @return   [type]                   [description]
+     */
+     public function followers()
+    {
+        return $this->belongsToMany(User::Class, 'followers', 'user_id', 'follower_id');
+    }
+    /**
+     * [followings 获取用户关注的人]
+     * @Author   larry1.li
+     * @DateTime 2020-04-27T15:50:33+0800
+     * @return   [type]                   [description]
+     */
+    public function followings()
+    {
+        return $this->belongsToMany(User::Class, 'followers', 'follower_id', 'user_id');
+    }
+
+    /**
+     * [follow 关注]
+     * @Author   larry1.li
+     * @DateTime 2020-04-27T15:57:16+0800
+     * @param    [type]                   $user_ids [description]
+     * @return   [type]                             [description]
+     */
+     public function follow($user_ids)
+    {
+        if ( ! is_array($user_ids)) {
+            $user_ids = compact('user_ids');
+        }
+        $this->followings()->sync($user_ids, false);
+    }
+    /**
+     * [unfollow 取消关注]
+     * @Author   larry1.li
+     * @DateTime 2020-04-27T15:57:27+0800
+     * @param    [type]                   $user_ids [description]
+     * @return   [type]                             [description]
+     */
+    public function unfollow($user_ids)
+    {
+        if ( ! is_array($user_ids)) {
+            $user_ids = compact('user_ids');
+        }
+        $this->followings()->detach($user_ids);
+    }
+
+    /**
+     * [isFollowing 判断用户A是否包含在用户B中]
+     * @Author   larry1.li
+     * @DateTime 2020-04-27T15:58:39+0800
+     * @param    [type]                   $user_id [description]
+     * @return   boolean                           [description]
+     */
+    public function isFollowing($user_id)
+    {
+        return $this->followings->contains($user_id);
+    }
 }
