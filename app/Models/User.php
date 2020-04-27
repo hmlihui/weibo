@@ -50,5 +50,15 @@ class User extends Authenticatable
             $user->activation_token = str::random(10);
         });
     }
+    /**
+     * [statuses 一个用户关联多条微博]
+     * @Author   larry1.li
+     * @DateTime 2020-04-27T13:40:42+0800
+     * @return   [type]                   [description]
+     */
+     public function statuses()
+    {
+        return $this->hasMany(Status::class);
+    }    
 
 }
