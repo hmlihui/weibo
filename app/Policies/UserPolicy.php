@@ -18,4 +18,15 @@ class UserPolicy
     {
         return $currentUser->is_admin && $currentUser->id !== $user->id;
     }
+
+    class StatusPolicy
+{
+    use HandlesAuthorization;
+
+    public function destroy(User $user, Status $status)
+    {
+        return $user->id === $status->user_id;
+    }
 }
+}
+

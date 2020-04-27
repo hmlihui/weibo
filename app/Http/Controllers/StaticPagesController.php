@@ -2,35 +2,31 @@
 
 namespace App\Http\Controllers;
 
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Status;
+use Auth;
 
 class StaticPagesController extends Controller
 {
-    /**
-     * [home description]
-     * @Author   larry1.li
-     * @DateTime 2020-04-17T17:31:44+0800
-     * @return   [type]                   [description]
-     */
-    public function home(){
-    	return view('static_pages/home');
-    }
-    /**
-     * [help description]
-     * @return [type] [description]
-     */
-    public function help(){
-    	return view('static_pages/help');
-    }
-    /**
-     * [about description]
-     * @Author   larry1.li
-     * @DateTime 2020-04-17T17:32:34+0800
-     * @return   [type]                   [description]
-     */
-    public function about(){
-    	return view('static_pages/about');
+    public function home()
+    {
+        $feed_items = [];
+        if (Auth::check()) {
+            $feed_items = Auth::user()->feed()->paginate(30);
+        }
+
+        return view('static_pages/home', compact('feed_items'));
     }
 
+    public function help()
+    {
+        return view('static_pages/help');
+    }
+
+    public function about()
+    {
+        return view('static_pages/about');
+    }
 }

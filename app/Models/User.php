@@ -59,6 +59,18 @@ class User extends Authenticatable
      public function statuses()
     {
         return $this->hasMany(Status::class);
-    }    
+    }   
+
+    /**
+     * [feed 微博列表]
+     * @Author   larry1.li
+     * @DateTime 2020-04-27T15:17:30+0800
+     * @return   [type]                   [description]
+     */
+    public function feed()
+    {
+        return $this->statuses()
+                    ->orderBy('created_at', 'desc');
+    } 
 
 }
